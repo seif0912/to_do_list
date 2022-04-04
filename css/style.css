@@ -86,6 +86,7 @@ form button:hover {
     background-color: #efefef;
     margin: 10px 0;
     border-radius: 10px;
+    transition: .25s;
 }
 
 .task p {
@@ -98,11 +99,17 @@ form button:hover {
     border-radius: 5em;
     transition: .25s;
     margin: 0 10px;
+    cursor: pointer;
 }
 
 .task i:hover {
     background-color: red;
     color: #fdfdfd;
+}
+
+.removed {
+    transform: scale(0);
+    opacity: 0;
 }
 
 
