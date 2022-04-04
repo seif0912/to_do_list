@@ -6,7 +6,7 @@ const tasks = document.querySelector(".tasks");
 
 
 // event listeners
-
+document.addEventListener('DOMContentLoaded', getTasks)
 taskBtn.addEventListener('click', addTask);
 tasks.addEventListener('click', removeTask)
 
@@ -16,9 +16,14 @@ function addTask() {
     // create task div
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('task');
-    taskDiv.innerHTML = `<p>${taskInput.value}</p><i class="fa-solid fa-trash"></i>`;
-    tasks.appendChild(taskDiv);
-    taskInput.value = '';
+    if (taskInput.value != "") {
+        taskDiv.innerHTML = `<p>${taskInput.value}</p><i class="fa-solid fa-trash"></i>`;
+        tasks.appendChild(taskDiv);
+        // add task to local storage
+        saveLocal(taskInput.value);
+        taskInput.value = '';
+    }
+
 }
 
 function removeTask(e) {
@@ -26,10 +31,49 @@ function removeTask(e) {
     if (item.classList[1] === 'fa-trash') {
         const taskItem = item.parentElement;
         taskItem.classList.add('removed');
+        removeLocalTask(taskItem);
         taskItem.addEventListener('transitionend', function() {
             taskItem.remove();
         })
 
         //
     }
+}
+
+function saveLocal(task) {
+    let tasksL;
+    if (localStorage.getItem('tasksL') === null) {
+        tasksL = [];
+    } else {
+        tasksL = JSON.parse(localStorage.getItem('tasksL'));
+    }
+    tasksL.push(task);
+    localStorage.setItem("tasksL", JSON.stringify(tasksL))
+}
+
+function getTasks() {
+    let tasksL;
+    if (localStorage.getItem('tasksL') === null) {
+        tasksL = [];
+    } else {
+        tasksL = JSON.parse(localStorage.getItem('tasksL'));
+    }
+    tasksL.forEach(function(task) {
+        const taskDiv = document.createElement('div');
+        taskDiv.classList.add('task')
+        taskDiv.innerHTML = `<p>${task}</p><i class="fa-solid fa-trash"></i>`;
+        tasks.appendChild(taskDiv);
+    });
+}
+
+function removeLocalTask(task) {
+    let tasksL;
+    if (localStorage.getItem('tasksL') === null) {
+        tasksL = [];
+    } else {
+        tasksL = JSON.parse(localStorage.getItem('tasksL'));
+    }
+    const taskIndex = task.children[0].innerText
+    tasksL.splice(tasksL.indexOf(taskIndex), 1)
+    localStorage.setItem("tasksL", JSON.stringify(tasksL))
 }
