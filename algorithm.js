@@ -10,6 +10,15 @@ document.addEventListener('DOMContentLoaded', getTasks)
 taskBtn.addEventListener('click', addTask);
 tasks.addEventListener('click', removeTask)
 
+//onEnter
+taskInput.addEventListener("keydown", function(event){
+    if (event.key === 'Enter' || event.which === 13) {
+        event.preventDefault();
+        addTask();
+    }
+});
+
+
 // functions
 
 function addTask() {
